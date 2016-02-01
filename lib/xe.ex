@@ -9,6 +9,5 @@ defmodule Xe do
     "http://www.xe.com/currencyconverter/convert/?From=#{from}&To=#{to}"
   end
 
-  def handle_response(%{status_code: 200, body: body}), do: {:ok, body}
-  def handle_response(%{status_code: _,   body: body}), do: {:error, body}
+  def handle_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}), do: {:ok, body}
 end
