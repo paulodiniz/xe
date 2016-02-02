@@ -2,12 +2,12 @@ defmodule Xe.CLI do
 
   @default_to "US"
 
-  def run(argv) do
-    argv 
+  def main(argv) do
+    argv
       |> parse_args
       |> process
   end
-  
+
   def parse_args(argv) do
     parse = OptionParser.parse(argv, switches: [ help: :boolean],
                                      aliases:  [ h:    :help])
@@ -27,6 +27,9 @@ defmodule Xe.CLI do
   end
 
   def process({from, to}) do
-    Xe.fetch(from, to)
+    case Xe.fetch(from, to) do
+      {:ok, values } -> IO.puts(values)
+      {:error, _}    -> IO.puts("Error fetching")
+    end
   end
 end

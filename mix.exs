@@ -5,6 +5,7 @@ defmodule Xe.Mixfile do
     [app: :xe,
      version: "0.0.1",
      elixir: "~> 1.2",
+     escript: escript_config,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps]
@@ -32,5 +33,9 @@ defmodule Xe.Mixfile do
       { :exquery, "~> 0.0.11" },
       { :floki, "~> 0.7"},
     ]
+  end
+
+  defp escript_config do
+    [ main_module: Xe.CLI ]
   end
 end
