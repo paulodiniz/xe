@@ -28,7 +28,9 @@ defmodule Xe.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      { :httpoison, "~> 0.8.0" }
+      { :httpoison, "~> 0.8.0" },
+      { :exquery, "~> 0.0.11" },
+      { :floki, "~> 0.7"},
     ]
   end
 end
