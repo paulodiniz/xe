@@ -6,6 +6,8 @@ defmodule Xe.Mixfile do
      version: "0.0.1",
      elixir: "~> 1.2",
      escript: escript_config,
+     description: description,
+     package: package,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps]
@@ -37,5 +39,20 @@ defmodule Xe.Mixfile do
 
   defp escript_config do
     [ main_module: Xe.CLI ]
+  end
+
+  defp description do
+    """
+      Real time conversion for currencies
+    """
+  end
+
+  defp package do
+    [# These are the default files included in the package
+     files: ["lib", "mix.exs", "README*", "readme*", "LICENSE*", "license*"],
+     maintainers: ["Paulo Diniz"],
+     licenses: ["Apache 2.0"],
+     links: %{"GitHub" => "https://github.com/paulodiniz/xe",
+              "Docs" => "https://github.com/paulodiniz/xe"}]
   end
 end
