@@ -1,6 +1,6 @@
 defmodule Xe do
 
-  def fetch(from, to) do
+  def fetch({from, to}) do
     url(from, to)
     |> HTTPoison.get
     |> handle_response

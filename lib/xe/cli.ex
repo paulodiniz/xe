@@ -5,7 +5,8 @@ defmodule Xe.CLI do
   def main(argv) do
     argv
       |> parse_args
-      |> process
+      |> Xe.fetch
+      |> print_values
   end
 
   def parse_args(argv) do
@@ -26,10 +27,11 @@ defmodule Xe.CLI do
     System.halt(0)
   end
 
-  def process({from, to}) do
-    case Xe.fetch(from, to) do
-      {:ok, values } -> IO.puts(values)
-      {:error, _}    -> IO.puts("Error fetching")
-    end
+  def print_values({:ok, values}) do
+    IO.puts(values)
+  end
+
+  def print_values({:error, _}) do
+    IO.puts("ERROR")
   end
 end
