@@ -32,7 +32,6 @@ defmodule Xe.Mixfile do
   defp deps do
     [
       { :httpoison, "~> 0.8.0" },
-      { :exquery, "~> 0.0.11" },
       { :floki, "~> 0.7"},
     ]
   end
