@@ -11,7 +11,7 @@ defmodule CliTest do
     assert parse_args(["BR", "EUR"]) == { "BR", "EUR" }
   end
 
-  test "to is default to US if one value is given" do
-    assert parse_args(["BR"]) == { "BR", "US" }
+  test "to is default to USD if one value is given" do
+    assert parse_args(["BR"]) == { "BR", "USD" }
   end
 end
