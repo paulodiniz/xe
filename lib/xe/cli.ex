@@ -1,12 +1,11 @@
 defmodule Xe.CLI do
 
-  @default_to "US"
+  @default_to "USD"
 
   def main(argv) do
     argv
-      |> parse_args
-      |> Xe.fetch
-      |> print_values
+    |> parse_args
+    |> process
   end
 
   def parse_args(argv) do
@@ -27,11 +26,17 @@ defmodule Xe.CLI do
     System.halt(0)
   end
 
-  def print_values({:ok, values}) do
+  def process(input = {_from, _to}) do
+    input
+    |> Xe.fetch
+    |> print_values
+  end
+
+  defp print_values({:ok, values}) do
     IO.puts(values)
   end
 
-  def print_values({:error, _}) do
+  defp print_values({:error, _}) do
     IO.puts("ERROR")
   end
 end

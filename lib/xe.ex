@@ -16,7 +16,7 @@ defmodule Xe do
       |> parse_res
   end
 
-  def parse_res([head, _ | tail]), do: {:error, [nil, nil]}
+  def parse_res([_head, _ | _tail]), do: {:error, [nil, nil]}
   def parse_res([head | []]) do
     case head do
       {"tr", _, tds} -> {:ok, fetch_values(tds) }
