@@ -1,6 +1,15 @@
 # Xe
 
-**TODO: Add description**
+Xe library provides realtime currency conversion
+
+Example:
+
+```elixir
+  iex(1)> Xe.fetch({'USD', 'EUR'})
+  {:ok, ["1.00", "0.891482"]}
+```
+
+It fecthes realtime conversion from (http://www.xe.com)
 
 ## Installation
 
