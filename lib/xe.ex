@@ -28,6 +28,7 @@ defmodule Xe do
     tds
       |> Enum.map(&fetch_value_from_td(&1))
       |> Enum.reject(fn(x) -> is_nil(x) end)
+      |> Enum.map(&convert_value(&1))
   end
 
   def fetch_value_from_td(td) do
@@ -37,4 +38,11 @@ defmodule Xe do
     end
   end
 
+  def convert_value(value) do
+    case Float.parse(value) do
+      { float, _ } -> float
+      :errro       -> value
+    end
+  end
 end
+
