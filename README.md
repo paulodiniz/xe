@@ -6,7 +6,7 @@ Example:
 
 ```elixir
   iex(1)> Xe.fetch({'USD', 'EUR'})
-  {:ok, ["1.00", "0.891482"]}
+  {:ok, [1.00, 0.891482]}
 ```
 
 It fecthes realtime conversion from (http://www.xe.com)
