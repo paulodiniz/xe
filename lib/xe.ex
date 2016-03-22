@@ -28,6 +28,7 @@ defmodule Xe do
     tds
       |> Enum.map(&fetch_value_from_td/1)
       |> Enum.reject(fn(x) -> is_nil(x) end)
+      |> Enum.map(&String.strip/1)
       |> Enum.map(&convert_value/1)
   end
 
