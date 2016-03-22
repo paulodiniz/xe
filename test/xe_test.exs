@@ -13,6 +13,6 @@ defmodule XeTest do
           ["4.36069 ", {"span", [{"class", "uccResCde"}], ["BRL"]},
             {:comment, " WARNING: Automated extraction of rates is prohibited under the Terms of Use. "}]}]}]
 
-    assert Xe.parse_res(response) == {:ok, [1.00, 4.36069]}
+    assert Xe.parse_res(response) == {:ok, [Decimal.new("1.00"), Decimal.new("4.36069")]}
   end
 end
