@@ -1,5 +1,4 @@
 defmodule Xe do
-
   def fetch({from, to}) do
     url(from, to)
     |> HTTPoison.get
@@ -12,35 +11,22 @@ defmodule Xe do
 
   def handle_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}) do
     body
-      |> Floki.find(".uccRes")
-      |> parse_res
+    |> Floki.find(".uccRes")
+    |> parse_res
   end
 
-  def parse_res([_head, _ | _tail]), do: {:error, [nil, nil]}
-  def parse_res([head | []]) do
-    case head do
-      {"tr", _, tds} -> {:ok, fetch_values(tds) }
-      _              -> {:error, [nil, nil]}
-    end
-  end
+  def parse_res([{"tr", _, tds} | []]), do: {:ok, fetch_values(tds)}
+  def parse_res([_ | []]), do: {:error, [nil, nil]}
 
   def fetch_values(tds) do
     tds
-      |> Enum.map(&fetch_value_from_td/1)
-      |> Enum.reject(fn(x) -> is_nil(x) end)
-      |> Enum.map(&String.strip/1)
-      |> Enum.map(&convert_value/1)
+    |> Enum.map(&fetch_value_from_td/1)
+    |> Enum.reject(&is_nil/1)
+    |> Enum.map(&String.strip/1)
+    |> Enum.map(&Decimal.new/1)
   end
 
-  def fetch_value_from_td(td) do
-    case td do
-      {"td", _, ["="]}  -> nil
-      {"td", _, values} -> List.first(values)
-    end
-  end
-
-  def convert_value(value) do
-    Decimal.new(value)
-  end
+  def fetch_value_from_td({"td", _, ["="]}), do: nil
+  def fetch_value_from_td({"td", _, values}), do: List.first(values)
 end
 
