@@ -1,5 +1,6 @@
 defmodule XeTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
+
   doctest Xe
 
   test "parsing response" do
