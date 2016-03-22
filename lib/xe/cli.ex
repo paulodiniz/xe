@@ -1,4 +1,6 @@
 defmodule Xe.CLI do
+  @moduledoc """
+  """
 
   @default_to "USD"
 

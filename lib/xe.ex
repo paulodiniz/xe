@@ -1,32 +1,49 @@
 defmodule Xe do
-  def fetch({from, to}) do
-    url(from, to)
-    |> HTTPoison.get
-    |> handle_response
+  @moduledoc ~S"""
+  Xe is a dead-simple way of converting between currencies.
+
+  There's only two methods you need to worry about, `Xe.rates` and `Xe.rates!`.
+
+  # Usage
+
+  You can specify currencies as a tuple of atoms or strings:
+
+      {:ok, {_, usd_to_brl}} = Xe.rates({"USD", "BRL"})
+      {:ok, {_, usd_to_brl}} = Xe.rates({:usd, :brl})
+
+  Similarly, you can specify currencies as seperate parameters:
+
+      {:ok, {_, usd_to_brl}} = Xe.rates(:usd, :brl)
+
+  You may also use the bang variant, which fails unless the rates can be
+  fetched and extracted:
+
+      {_, usd_to_brl} = Xe.rates!(:usd, :brl)
+  """
+
+  import Xe.Fetcher, only: [fetch: 2]
+  import Xe.Parser, only: [parse: 1]
+
+  @type currency :: atom | binary
+  @type rate :: Decimal.t
+
+  @spec rates({from :: currency, to :: currency}) :: {:ok, {rate, rate}} | {:error, any}
+  def rates({from, to}), do: rates(from, to)
+
+  @spec rates(from :: currency, to :: currency) :: {:ok, {rate, rate}} | {:error, any}
+  def rates(from, to) do
+    with {:ok, response} <- fetch(from, to),
+         {:ok, rates} <- parse(response.body),
+     do: {:ok, rates}
   end
 
-  def url(from, to) do
-    "http://www.xe.com/currencyconverter/convert/?From=#{from}&To=#{to}"
+  @spec rates!({from :: currency, to :: currency}) :: {rate, rate}
+  def rates!({from, to}), do: rates!(from, to)
+
+  @spec rates!(from :: currency, to :: currency) :: {rate, rate}
+  def rates!(from, to) do
+    {:ok, rates} = rates(from, to)
+    rates
   end
-
-  def handle_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}) do
-    body
-    |> Floki.find(".uccRes")
-    |> parse_res
-  end
-
-  def parse_res([{"tr", _, tds} | []]), do: {:ok, fetch_values(tds)}
-  def parse_res([_ | []]), do: {:error, [nil, nil]}
-
-  def fetch_values(tds) do
-    tds
-    |> Enum.map(&fetch_value_from_td/1)
-    |> Enum.reject(&is_nil/1)
-    |> Enum.map(&String.strip/1)
-    |> Enum.map(&Decimal.new/1)
-  end
-
-  def fetch_value_from_td({"td", _, ["="]}), do: nil
-  def fetch_value_from_td({"td", _, values}), do: List.first(values)
 end
 
