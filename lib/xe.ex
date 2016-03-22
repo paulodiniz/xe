@@ -40,10 +40,7 @@ defmodule Xe do
   end
 
   def convert_value(value) do
-    case Float.parse(value) do
-      { float, _ } -> float
-      :error       -> value
-    end
+    Decimal.new(value)
   end
 end
 
