@@ -2,57 +2,69 @@ defmodule Xe.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :xe,
-     version: "0.0.1",
+    [name: "Xe",
+     app: :xe,
+     version: version,
+     description: "Real time conversion for currencies.",
+     homepage_url: homepage_url,
+     source_url: github_url,
      elixir: "~> 1.2",
-     escript: escript_config,
-     description: description,
-     package: package,
+     elixirc_paths: elixirc_paths(Mix.env),
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps]
+     deps: deps,
+     escript: escript_config,
+     package: package,
+     docs: docs]
   end
 
-  # Configuration for the OTP application
-  #
-  # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :httpoison]]
+    [applications: applications(Mix.env)]
   end
 
-  # Dependencies can be Hex packages:
-  #
-  #   {:mydep, "~> 0.3.0"}
-  #
-  # Or git/path repositories:
-  #
-  #   {:mydep, git: "https://github.com/elixir-lang/mydep.git", tag: "0.1.0"}
-  #
-  # Type "mix help deps" for more examples and options
+  defp applications(_), do: ~w()a ++ applications
+  defp applications, do: ~w(logger decimal httpoison)a
+
+  defp homepage_url, do: github_url
+  defp github_url, do: "https://github.com/paulodiniz/xe"
+  defp documentation_url, do: "https://github.com/paulodiniz/xe"
+
+  defp version do
+    case System.cmd("git", ["describe", "--tags"], stderr_to_stdout: true) do
+      {tag, 0} ->
+        String.strip(tag)
+      _ ->
+        "0.0.0"
+    end
+  end
+
+  defp elixirc_paths(:test), do: ~w(test/support) ++ elixirc_paths
+  defp elixirc_paths(_), do: elixirc_paths
+  defp elixirc_paths, do: ~w(lib)
+
   defp deps do
-    [
-      { :httpoison, "~> 0.8.0" },
-      { :floki, "~> 0.7" },
-      { :decimal, "~> 1.1.0" }
-    ]
+    [{:decimal, "~> 1.0"},
+     {:httpoison, "~> 0.8"},
+     {:floki, "~> 0.7"},
+     {:ex_doc, "~> 0.10", only: :docs},
+     {:earmark, "~> 0.1", only: :docs}]
   end
 
   defp escript_config do
-    [ main_module: Xe.CLI ]
-  end
-
-  defp description do
-    """
-      Real time conversion for currencies
-    """
+    [main_module: Xe.CLI]
   end
 
   defp package do
-    [# These are the default files included in the package
-     files: ["lib", "mix.exs", "README*", "readme*", "LICENSE*", "license*"],
-     maintainers: ["Paulo Diniz"],
+    [maintainers: ["Paulo Diniz"],
      licenses: ["Apache 2.0"],
-     links: %{"GitHub" => "https://github.com/paulodiniz/xe",
-              "Docs" => "https://github.com/paulodiniz/xe"}]
+     links: %{"GitHub" => github_url, "Docs" => documentation_url},
+     files: ~w(mix.exs lib README* LICENSE*)]
+  end
+
+  defp docs do
+    [main: "Xe",
+     canonical: "http://hexdocs.pm/xe",
+     source_ref: version,
+     source_url: github_url]
   end
 end
