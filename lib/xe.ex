@@ -1,49 +1,48 @@
 defmodule Xe do
-  @moduledoc ~S"""
-  Xe is a dead-simple way of converting between currencies.
 
-  There's only two methods you need to worry about, `Xe.rates` and `Xe.rates!`.
-
-  # Usage
-
-  You can specify currencies as a tuple of atoms or strings:
-
-      {:ok, {_, usd_to_brl}} = Xe.rates({"USD", "BRL"})
-      {:ok, {_, usd_to_brl}} = Xe.rates({:usd, :brl})
-
-  Similarly, you can specify currencies as seperate parameters:
-
-      {:ok, {_, usd_to_brl}} = Xe.rates(:usd, :brl)
-
-  You may also use the bang variant, which fails unless the rates can be
-  fetched and extracted:
-
-      {_, usd_to_brl} = Xe.rates!(:usd, :brl)
-  """
-
-  import Xe.Fetcher, only: [fetch: 2]
-  import Xe.Parser, only: [parse: 1]
-
-  @type currency :: atom | binary
-  @type rate :: Decimal.t
-
-  @spec rates({from :: currency, to :: currency}) :: {:ok, {rate, rate}} | {:error, any}
-  def rates({from, to}), do: rates(from, to)
-
-  @spec rates(from :: currency, to :: currency) :: {:ok, {rate, rate}} | {:error, any}
-  def rates(from, to) do
-    with {:ok, response} <- fetch(from, to),
-         {:ok, rates} <- parse(response.body),
-     do: {:ok, rates}
+  def fetch({from, to}) do
+    url(from, to)
+    |> HTTPoison.get
+    |> handle_response
   end
 
-  @spec rates!({from :: currency, to :: currency}) :: {rate, rate}
-  def rates!({from, to}), do: rates!(from, to)
+  def url(from, to) do
+    "http://www.xe.com/currencyconverter/convert/?From=#{from}&To=#{to}"
+  end
 
-  @spec rates!(from :: currency, to :: currency) :: {rate, rate}
-  def rates!(from, to) do
-    {:ok, rates} = rates(from, to)
-    rates
+  def handle_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}) do
+    body
+      |> Floki.find(".uccRes")
+      |> parse_res
+  end
+
+  def parse_res([_head, _ | _tail]), do: {:error, [nil, nil]}
+  def parse_res([head | []]) do
+    case head do
+      {"tr", _, tds} -> {:ok, fetch_values(tds) }
+      _              -> {:error, [nil, nil]}
+    end
+  end
+
+  def fetch_values(tds) do
+    tds
+      |> Enum.map(&fetch_value_from_td(&1))
+      |> Enum.reject(fn(x) -> is_nil(x) end)
+      |> Enum.map(&convert_value(&1))
+  end
+
+  def fetch_value_from_td(td) do
+    case td do
+      {"td", _, ["="]}  -> nil
+      {"td", _, values} -> List.first(values)
+    end
+  end
+
+  def convert_value(value) do
+    case Float.parse(value) do
+      { float, _ } -> float
+      :error       -> value
+    end
   end
 end
 
