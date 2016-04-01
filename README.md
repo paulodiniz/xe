@@ -1,29 +1,31 @@
 # Xe
 
-Xe library provides realtime currency conversion
+Xe is a dead-simple way of converting between currencies. It uses real-time conversion rates from [Xe.com](http://www.xe.com)
 
-Example:
+## Example
 
 ```elixir
-  iex(1)> Xe.fetch({'USD', 'EUR'})
-  {:ok, [1.00, 0.891482]}
+  iex(1)> Xe.rates("USD", "BRL")
+  {:ok, {1.00, 0.891482}}
 ```
-
-It fecthes realtime conversion from (http://www.xe.com)
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
+Standard routine:
 
-  1. Add xe to your list of dependencies in `mix.exs`:
+  1. Add `xe` to your list of dependencies in `mix.exs`:
 
-        def deps do
-          [{:xe, "~> 0.0.1"}]
-        end
+  ```elixir
+  def deps do
+    [{:xe, "~> 0.0.1"}]
+  end
+  ```
 
-  2. Ensure xe is started before your application:
+  2. Ensure `xe` is started before your application:
 
-        def application do
-          [applications: [:xe]]
-        end
+  ```elixir
+  def application do
+    [applications: [:xe]]
+  end
+  ```
 

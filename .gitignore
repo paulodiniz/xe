@@ -1,6 +1,25 @@
-/_build
-/cover
-/deps
+#
+# Sublime Text 2/3
+#
+
+*.sublime-*
+
+#
+# Erlang and Elixir
+#
+
+# Ignore dependencies.
+deps/
+
+# Ignore build artifacts and releases.
+_build/
+rel/
+
+# Ignore coverage.
+cover/
+
+# Ignore crash dumps.
 erl_crash.dump
+
+# For everything else, there's MasterCard.
 *.ez
-xe
