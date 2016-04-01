@@ -11,8 +11,6 @@ Xe is a dead-simple way of converting between currencies. It uses real-time conv
 
 ## Installation
 
-Standard routine:
-
   1. Add `xe` to your list of dependencies in `mix.exs`:
 
   ```elixir
@@ -21,11 +19,6 @@ Standard routine:
   end
   ```
 
-  2. Ensure `xe` is started before your application:
+  2. Drink your :tea:
 
-  ```elixir
-  def application do
-    [applications: [:xe]]
-  end
-  ```
-
+  3. Enjoy!
