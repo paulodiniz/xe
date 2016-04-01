@@ -1,6 +1,5 @@
 defmodule Xe.Fetcher do
-  @moduledoc ~S"""
-  """
+  @moduledoc false
 
   # Make the base url we use to fetch rates from overridable so we can use mock
   # edpoints for end-to-end testing.

@@ -1,6 +1,5 @@
 defmodule Xe.Parser do
-  @moduledoc ~S"""
-  """
+  @moduledoc false
 
   def parse(body) do
     body
