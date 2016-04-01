@@ -5,7 +5,7 @@ Xe is a dead-simple way of converting between currencies. It uses real-time conv
 ## Example
 
 ```elixir
-  iex(1)> Xe.rates("USD", "BRL")
+  iex(1)> Xe.rates("USD", "EUR")
   {:ok, {1.00, 0.891482}}
 ```
 
