@@ -8,6 +8,11 @@ defmodule XeTest do
     assert Xe.rates({:usd, :brl}) == Xe.rates(:usd, :brl)
   end
 
+  test "bang variants" do
+    assert {:ok, Xe.rates!({"USD", "BRL"})} == Xe.rates({"USD", "BRL"})
+    assert {:ok, Xe.rates!(:usd, :brl)} == Xe.rates(:usd, :brl)
+  end
+
   test "parsing response" do
     response = [
       {"tr", [{"class", "uccRes"}],
