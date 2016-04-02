@@ -15,7 +15,8 @@ defmodule Xe.Mixfile do
      deps: deps,
      escript: escript_config,
      package: package,
-     docs: docs]
+     docs: docs,
+     test_coverage: [tool: ExCoveralls]]
   end
 
   def application do
@@ -42,13 +43,19 @@ defmodule Xe.Mixfile do
   defp elixirc_paths(_), do: elixirc_paths
   defp elixirc_paths, do: ~w(lib)
 
-  defp deps do
-    [{:decimal, "~> 1.0"},
-     {:httpoison, "~> 0.8"},
-     {:floki, "~> 0.7"},
-     {:ex_doc, "~> 0.10", only: :docs},
-     {:earmark, "~> 0.1", only: :docs}]
-  end
+  defp deps do [
+    {:decimal, "~> 1.0"},
+    {:httpoison, "~> 0.8"},
+    {:floki, "~> 0.7"},
+
+    # Testing
+    {:excoveralls, "~> 0.4", only: :test},
+
+    # Documentation
+    {:ex_doc, "~> 0.10", only: :docs},
+    {:earmark, "~> 0.1", only: :docs},
+    {:inch_ex, ">= 0.0.0", only: :docs}
+  ] end
 
   defp escript_config do
     [main_module: Xe.CLI]
