@@ -18,6 +18,9 @@ rel/
 # Ignore coverage.
 cover/
 
+# Ignore documentation.
+docs/
+
 # Ignore crash dumps.
 erl_crash.dump
 

@@ -1,5 +1,10 @@
 # Xe
 
+[![Continuous Integration](https://img.shields.io/travis/paulodiniz/xe/master.svg)](https://travis-ci.org/paulodiniz/xe)
+[![Code Coverage](https://img.shields.io/coveralls/paulodiniz/xe/master.svg)](https://coveralls.io/github/paulodiniz/xe)
+[![Documentation](http://inch-ci.org/github/paulodiniz/xe.svg)](http://inch-ci.org/github/paulodiniz/xe)
+[![Package](https://img.shields.io/hexpm/dt/xe.svg)](https://hex.pm/packages/xe)
+
 Xe is a dead-simple way of converting between currencies. It uses real-time conversion rates from [Xe.com](http://www.xe.com)
 
 ## Example
